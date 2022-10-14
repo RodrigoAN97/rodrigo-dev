@@ -47,18 +47,24 @@ const controls = new OrbitControls(camera, renderer.domElement);
 
 // adds a star in a random space (-100, 100) for x, y, z
 function addStar() {
-  const geometry = new THREE.SphereGeometry(0.25, 24, 24);
-  const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
-  const star = new THREE.Mesh(geometry, material);
+  // const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+  // const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+  // const star = new THREE.Mesh(geometry, material);
+  const tsTexture = new THREE.TextureLoader().load("typescript.svg");
+  const ts = new THREE.Mesh(
+    new THREE.BoxGeometry(3, 3, 3),
+    new MeshBasicMaterial({ map: tsTexture })
+  );
 
   const [x, y, z] = Array(3)
     .fill(0)
-    .map(() => THREE.MathUtils.randFloatSpread(100));
+    .map(() => THREE.MathUtils.randFloatSpread(25));
 
-  star.position.set(x, y, z);
-  scene.add(star);
+  ts.position.set(x, y, z);
+  scene.add(ts);
 }
 
+Array(10).fill(0).forEach(addStar);
 
 const moonTexture = new THREE.TextureLoader().load("moon.jpeg");
 const normalTexture = new THREE.TextureLoader().load("normal.jpeg");
@@ -66,16 +72,18 @@ const moon = new THREE.Mesh(
   new THREE.SphereGeometry(3, 32, 32),
   new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: normalTexture })
 );
+moon.position.z = 30;
+moon.position.x = 10;
+
 scene.add(moon);
 
 const spaceTexture = new THREE.TextureLoader().load("sky.jpeg");
 scene.background = spaceTexture;
 
-
 function animate() {
   torus.rotation.x += 0.01;
-  torus.rotation.y += 0.005;
-  torus.rotation.z += 0.01;
+  torus.rotation.y += 0.002;
+  torus.rotation.z += 0.001;
 
   controls.update();
 
@@ -84,3 +92,18 @@ function animate() {
 }
 
 animate();
+
+function moveCamera() {
+  const t = document.body.getBoundingClientRect().top;
+
+  moon.rotation.x += 0.01;
+  moon.rotation.y += 0.005;
+  moon.rotation.z += 0.01;
+
+  camera.position.z = t * -0.01;
+  camera.position.x = t * -0.0002;
+  camera.position.y = t * -0.0002;
+  console.log(camera.position);
+}
+
+document.body.onscroll = moveCamera;
