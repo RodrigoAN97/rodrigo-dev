@@ -1,6 +1,7 @@
 import "./style.scss";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { MeshBasicMaterial } from "three";
 
 // the scene is a container that holds all objects, cameras and lights
 const scene = new THREE.Scene();
@@ -58,7 +59,14 @@ function addStar() {
   scene.add(star);
 }
 
-// Array(200).fill(0).forEach(addStar);
+
+const moonTexture = new THREE.TextureLoader().load("moon.jpeg");
+const normalTexture = new THREE.TextureLoader().load("normal.jpeg");
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(3, 32, 32),
+  new THREE.MeshStandardMaterial({ map: moonTexture, normalMap: normalTexture })
+);
+scene.add(moon);
 
 const spaceTexture = new THREE.TextureLoader().load("sky.jpeg");
 scene.background = spaceTexture;
