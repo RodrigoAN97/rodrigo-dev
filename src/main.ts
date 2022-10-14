@@ -58,7 +58,11 @@ function addStar() {
   scene.add(star);
 }
 
-Array(200).fill(0).forEach(addStar);
+// Array(200).fill(0).forEach(addStar);
+
+const spaceTexture = new THREE.TextureLoader().load("sky.jpeg");
+scene.background = spaceTexture;
+
 
 function animate() {
   torus.rotation.x += 0.01;
